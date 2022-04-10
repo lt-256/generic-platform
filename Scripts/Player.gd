@@ -28,6 +28,8 @@ func _physics_process(delta):
 	
 	motion.y += get_gravity() * delta
 	
+	jump(direction)
+	
 	motion = move_and_slide(motion, Vector2.UP) 
 
 func get_direction() -> float:
@@ -53,3 +55,17 @@ func configure_animation(direction : float):
 
 func get_gravity() -> float:
 	return jump_gravity if motion.y < 0.0 else fall_gravity
+
+func jump(direction : float):
+	if is_on_floor():
+		if direction == 0:
+			motion.x = lerp(motion.x, 0, FRICTION)
+		
+		if Input.is_action_pressed("ui_up"):
+			motion.y = jump_velocity
+	else:
+		if Input.is_action_just_released("ui_up") and motion.y < jump_velocity/2.0:
+			motion.y = jump_velocity/2.0
+		
+		if direction == 0:
+			motion.x = lerp(motion.x, 0, AIR_RESISTANCE)
