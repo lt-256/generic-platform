@@ -16,3 +16,17 @@ onready var fall_gravity : float = ((-2.0 * jump_height) / (jump_time_to_descent
 
 var motion := Vector2.ZERO
 
+func _physics_process(delta):
+	var direction = get_direction()
+	
+	configure_move_speed(direction, delta)
+	
+	motion = move_and_slide(motion, Vector2.UP) 
+
+func get_direction() -> float:
+	return Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
+
+func configure_move_speed(direction : float, delta : float):
+	if direction != 0:
+		motion.x += direction * move_speed * delta
+		motion.x = clamp(motion.x, -MAX_SPEED, MAX_SPEED)
