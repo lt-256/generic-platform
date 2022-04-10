@@ -26,6 +26,8 @@ func _physics_process(delta):
 	configure_sprite_direction(direction)
 	configure_animation(direction)
 	
+	motion.y += get_gravity() * delta
+	
 	motion = move_and_slide(motion, Vector2.UP) 
 
 func get_direction() -> float:
@@ -48,3 +50,6 @@ func configure_animation(direction : float):
 	
 	if !is_on_floor():
 		animPlayer.play("jump")
+
+func get_gravity() -> float:
+	return jump_gravity if motion.y < 0.0 else fall_gravity
