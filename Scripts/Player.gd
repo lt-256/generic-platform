@@ -15,6 +15,7 @@ onready var jump_gravity : float = ((-2.0 * jump_height) / (jump_time_to_peak * 
 onready var fall_gravity : float = ((-2.0 * jump_height) / (jump_time_to_descent * jump_time_to_descent)) * -1.0
 
 onready var sprite := $Sprite
+onready var animPlayer := $AnimationPlayer
 
 var motion := Vector2.ZERO
 
@@ -23,6 +24,7 @@ func _physics_process(delta):
 	
 	configure_move_speed(direction, delta)
 	configure_sprite_direction(direction)
+	configure_animation(direction)
 	
 	motion = move_and_slide(motion, Vector2.UP) 
 
@@ -37,3 +39,12 @@ func configure_move_speed(direction : float, delta : float):
 func configure_sprite_direction(direction : float):
 	if direction != 0:
 		sprite.flip_h = direction < 0
+
+func configure_animation(direction : float):
+	if direction != 0:
+		animPlayer.play("run")
+	else:
+		animPlayer.play("idle")
+	
+	if !is_on_floor():
+		animPlayer.play("jump")
