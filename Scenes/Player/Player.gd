@@ -1,4 +1,5 @@
 extends KinematicBody2D
+class_name Player
 
 const MAX_SPEED := 64
 const FRICTION := .25
